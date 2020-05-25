@@ -36,7 +36,7 @@ describe('New post', () => {
     cy.get('.tag-pill').should('have.length', 2)
     cy.get('[data-cy=publish]').click()
 
-    cy.location('pathname').should('equal', '/article/first-post')
+    cy.location('pathname').should('include', '/article/first-post')
     cy.get('.tag-pill')
       .should('have.length', 2)
       .each(tag => {
@@ -89,7 +89,7 @@ describe('New post', () => {
       tagList: ['first', 'testing']
     })
 
-    cy.location('pathname').should('equal', '/article/first-post')
+    cy.location('pathname').should('include', '/article/first-post')
 
     cy.article({
       title: 'second post',
@@ -98,7 +98,7 @@ describe('New post', () => {
       tagList: ['second', 'testing']
     })
 
-    cy.location('pathname').should('equal', '/article/second-post')
+    cy.location('pathname').should('include', '/article/second-post')
 
     cy.get('[data-cy=home]').click()
     cy.log('Both articles under tag **testing**')
