@@ -13,7 +13,7 @@
   },
   "viewportHeight": 1000,
   "viewportWidth": 1000,
-  "video": true,
+  "video": false,
   "projectId": "rkph9x",
   "nodeVersion": "system"
 }

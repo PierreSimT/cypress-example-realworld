@@ -23,7 +23,7 @@ describe('New post', () => {
     cy.get('[data-cy=publish]').click()
 
     // changed url means the post was successfully created
-    cy.location('pathname').should('equal', '/article/my-title')
+    cy.location('pathname').should('include', '/article/my-title')
   })
 
   it('can edit an article', () => {
@@ -35,15 +35,15 @@ describe('New post', () => {
     cy.get('[data-cy=article]').type('this post is **important**.')
     cy.get('[data-cy=tags]').type('test{enter}')
     cy.get('[data-cy=publish]').click()
-    cy.location('pathname').should('equal', '/article/my-title')
+    cy.location('pathname').should('include', '/article/my-title')
 
     cy.get('[data-cy=edit-article]').click()
-    cy.location('pathname').should('equal', '/editor/my-title')
+    cy.location('pathname').should('include', '/editor/my-title')
     cy.get('[data-cy=title]')
       .clear()
       .type('a brand new title')
     cy.get('[data-cy=publish]').click()
-    cy.location('pathname').should('equal', '/article/a-brand-new-title')
+    cy.location('pathname').should('include', '/article/a-brand-new-title')
   })
 
   it('can fav and unfav an article', () => {
@@ -59,7 +59,7 @@ describe('New post', () => {
     // otherwise if we just click on the profile link right away
     // we might load profile - THEN immediately load the article
     // because we clicked on it first
-    cy.location('pathname').should('equal', '/article/my-title')
+    cy.location('pathname').should('include', '/article/my-title')
 
     cy.get('[data-cy=home]').click()
     cy.get('[data-cy=global-feed]').click()

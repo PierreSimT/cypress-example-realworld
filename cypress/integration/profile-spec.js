@@ -48,7 +48,7 @@ describe('Profile', () => {
       tagList: ['first', 'testing']
     })
 
-    cy.location('pathname').should('equal', '/article/first-post')
+    cy.location('pathname').should('include', '/article/first-post')
     cy.get('[data-cy=home]').click()
     cy.get('[data-cy=global-feed]').click()
     cy.get('.article-preview')
