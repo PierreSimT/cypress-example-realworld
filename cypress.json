@@ -1,14 +1,14 @@
 {
-  "baseUrl": "http://localhost:4100",
+  "baseUrl": "http://localhost",
   "env": {
-    "apiUrl": "http://localhost:3000",
+    "apiUrl": "http://localhost",
     "user": {
       "email": "tester@test.com",
       "password": "password1234",
       "username": "testuser"
     },
     "codeCoverage": {
-      "url": "http://localhost:3000/__coverage__"
+      "url": "http://localhost/__coverage__"
     }
   },
   "viewportHeight": 1000,

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realworld-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: realworld-backend
+  template:
+    metadata:
+      labels:
+        app: realworld-backend
+    spec:
+      containers:
+      - name: realworld-backend
+        image: gcr.io/devops-p4/backend
+        readinessProbe:
+          httpGet:
+            path: /api/tags
+            port: 3000
+        env:
+          - name: APP_SECRET
+            value: 'secret'
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: realworld-backend
+spec:
+    type: NodePort
+    ports:
+    - port: 3000
+      targetPort: 3000
+    selector:
+      app: realworld-backend
+ 

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realworld-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: realworld-frontend
+  template:
+    metadata:
+      labels:
+        app: realworld-frontend
+    spec:
+      containers:
+      - name: realworld-frontend
+        image: gcr.io/devops-p4/frontend
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: realworld-frontend
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 80
+      targetPort: 5000
+    selector:
+      app: realworld-frontend
+        

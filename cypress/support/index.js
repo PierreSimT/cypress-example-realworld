@@ -164,3 +164,9 @@ Cypress.Commands.add('postComment', (articleSlug, text) => {
   // need to reload the page to see it
   cy.reload()
 })
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false
+})
