@@ -3,6 +3,9 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
+  gcp-gke: circleci/gcp-gke@1.0.4
+  gcr: circleci/gcp-gcr@0.7.1
+  
 
 executors:
   latest:
@@ -63,6 +66,7 @@ commands:
       - run: ls -la .nyc_output
 
 jobs:
+  # Cypress JOB
   merge-coverage:
     description: Merges individual code coverage files and sends combined data to Coveralls.io
     executor: cypress/base-10
@@ -82,6 +86,53 @@ jobs:
       # https://coveralls.io/github/cypress-io/cypress-example-realworld
       - run:
           command: npm run coveralls || true
+
+  push-docker-frontend:
+    description: Build and push image to google Container Registry
+    machine: true
+    working_directory: ~/cypress-example-realworld/client
+    steps:
+      - checkout:
+          path: ~/cypress-example-realword
+      - gcr/gcr-auth
+      - gcr/build-image:
+          image: frontend
+          tag: latest
+      - gcr/push-image:
+          image: frontend
+          tag: latest
+
+  push-docker-backend:
+    description: Build and push image to google Container Registry
+    machine: true
+    working_directory: ~/cypress-example-realworld/server
+    steps:
+      - checkout:
+          path: ~/cypress-example-realword
+      - gcr/gcr-auth
+      - gcr/build-image:
+          image: backend
+          tag: latest
+      - gcr/push-image:
+          image: backend
+          tag: latest
+
+    deploy:
+      description: Deploy application to Google Kubernetes Engine
+      machine: true
+      steps:
+        - gcp-gke/install
+        - gcp-gke/init
+        - gcp-gke/rollout-image:
+            cluster: devops-p4
+            deployment: realworld-frontend
+            container: frontend
+            image: gcr.io/devops-p4/frontend:latest
+        - gcp-gke/rollout-image:
+          cluster: devops-p4
+          deployment: realworld-backend
+          container: backend
+          image: gcr.io/devops-p4/backend:latest
 
 workflows:
   build:
@@ -113,3 +164,18 @@ workflows:
       - merge-coverage:
           requires:
             - cypress/run
+
+      - push-docker-frontend:
+          requires:
+            - merge-coverage
+        
+      - push-docker-backend:
+          requires:
+            - merge-coverage
+
+      - deploy:
+          requires:
+            - push-docker-frontend
+            - push-docker-backend
+
+      
