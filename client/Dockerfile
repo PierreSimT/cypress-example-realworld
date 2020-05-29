@@ -2,9 +2,15 @@ FROM node:10
 
 WORKDIR /usr/src/app
 
-COPY ./build ./
+COPY ./package*.json ./
 
+RUN npm install
+
+COPY ./ .
+
+RUN npm run build
 RUN npm install -g serve
 
 EXPOSE 5000
-CMD ["serve", "-s", "."]
+CMD ["serve", "-s", "build"]
+
