@@ -129,10 +129,10 @@ jobs:
           container: frontend
           image: gcr.io/devops-p4/frontend:latest
       - gcp-gke/rollout-image:
-        cluster: devops-p4
-        deployment: realworld-backend
-        container: backend
-        image: gcr.io/devops-p4/backend:latest
+          cluster: devops-p4
+          deployment: realworld-backend
+          container: backend
+          image: gcr.io/devops-p4/backend:latest
 
 workflows:
   build:
