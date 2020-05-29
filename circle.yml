@@ -89,12 +89,12 @@ jobs:
   push-docker-frontend:
     description: Build and push image to google Container Registry
     machine: true
-    working_directory: ~/cypress-example-realworld/client
     steps:
       - checkout
       - gcr/gcr-auth
       - gcr/build-image:
           image: frontend
+          path: ~/cypress-example-realworld/client
           tag: latest
       - gcr/push-image:
           image: frontend
@@ -103,12 +103,12 @@ jobs:
   push-docker-backend:
     description: Build and push image to google Container Registry
     machine: true
-    working_directory: ~/cypress-example-realworld/server
     steps:
       - checkout
       - gcr/gcr-auth
       - gcr/build-image:
           image: backend
+          path: ~/cypress-example-realworld/server
           tag: latest
       - gcr/push-image:
           image: backend
