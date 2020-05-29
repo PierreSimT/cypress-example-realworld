@@ -15,6 +15,9 @@ spec:
       containers:
       - name: realworld-frontend
         image: gcr.io/devops-p4/frontend
+        env:
+          - name: NODE_API_ROOT
+            value: '/api'
         ports:
         - containerPort: 5000
 ---

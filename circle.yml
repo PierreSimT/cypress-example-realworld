@@ -6,7 +6,6 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.0.4
   gcr: circleci/gcp-gcr@0.7.1
   
-
 executors:
   latest:
     docker:
@@ -92,8 +91,7 @@ jobs:
     machine: true
     working_directory: ~/cypress-example-realworld/client
     steps:
-      - checkout:
-          path: ~/cypress-example-realword
+      - checkout
       - gcr/gcr-auth
       - gcr/build-image:
           image: frontend
@@ -107,8 +105,7 @@ jobs:
     machine: true
     working_directory: ~/cypress-example-realworld/server
     steps:
-      - checkout:
-          path: ~/cypress-example-realword
+      - checkout
       - gcr/gcr-auth
       - gcr/build-image:
           image: backend
