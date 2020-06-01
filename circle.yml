@@ -86,35 +86,57 @@ jobs:
       - run:
           command: npm run coveralls || true
 
-  push-docker-frontend:
-    description: Build and push image to google Container Registry
+  build-and-push-client:
     machine: true
-    working_directory: ~/cypress-example-realworld/client
     steps:
-      - checkout:
-          path: ~/cypress-example-realworld
-      - gcr/gcr-auth
-      - gcr/build-image:
-          image: frontend
-          tag: latest
-      - gcr/push-image:
-          image: frontend
-          tag: latest
+        - checkout
+        - run: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+        
+        - run: cd client && docker build -t pierresimt/frontend-cn:latest .
+        - run: docker push pierresimt/frontend:latest
 
-  push-docker-backend:
-    description: Build and push image to google Container Registry
+  build-and-push-server:
     machine: true
-    working_directory: ~/cypress-example-realworld/server
     steps:
-      - checkout:
-          path: ~/cypress-example-realworld
-      - gcr/gcr-auth
-      - gcr/build-image:
-          image: backend
-          tag: latest
-      - gcr/push-image:
-          image: backend
-          tag: latest
+        - checkout
+        - run: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+        
+        - run: cd server && docker build -t pierresimt/backend-cn:latest .
+        - run: docker push pierresimt/backend:latest
+
+  # push-docker-frontend:
+  #   description: Build and push image to google Container Registry
+  #   machine: true
+  #   working_directory: ~/cypress-example-realworld/client
+  #   steps:
+  #     - checkout:
+  #         path: ~/cypress-example-realworld
+  #     - gcr/gcr-auth
+  #     - run: gcloud info
+  #     - gcr/build-image:
+  #         image: frontend
+  #         tag: latest
+  #     - gcr/push-image:
+  #         image: frontend
+  #         tag: latest
+
+  # push-docker-backend:
+  #   description: Build and push image to google Container Registry
+  #   machine: true
+  #   working_directory: ~/cypress-example-realworld/server
+  #   steps:
+  #     - checkout:
+  #         path: ~/cypress-example-realworld
+  #     - gcr/gcr-auth
+  #     - run: gcloud info
+  #     - gcr/build-image:
+  #         image: backend
+  #         tag: latest
+  #     - gcr/push-image:
+  #         image: backend
+  #         tag: latest
 
   deploy:
     description: Deploy application to Google Kubernetes Engine
@@ -127,12 +149,12 @@ jobs:
           cluster:  realworld-cluster
           deployment: realworld-frontend
           container: frontend
-          image: gcr.io/devops-p4/frontend:latest
+          image: pierresimt/frontend:latest
       - gcp-gke/rollout-image:
           cluster:  realworld-cluster
           deployment: realworld-backend
           container: backend
-          image: gcr.io/devops-p4/backend:latest
+          image: pierresimt/backend:latest
 
 workflows:
   build:
@@ -165,17 +187,12 @@ workflows:
           requires:
             - cypress/run
 
-      - push-docker-frontend:
-          requires:
-            - merge-coverage
-        
-      - push-docker-backend:
-          requires:
-            - merge-coverage
+      - build-and-push-client
+      - build-and-push-server
 
       - deploy:
           requires:
-            - push-docker-frontend
-            - push-docker-backend
+            - build-and-push-client
+            - build-and-push-server
 
       
