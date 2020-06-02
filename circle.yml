@@ -106,38 +106,6 @@ jobs:
         - run: cd server && docker build -t pierresimt/backend:latest .
         - run: docker push pierresimt/backend:latest
 
-  # push-docker-frontend:
-  #   description: Build and push image to google Container Registry
-  #   machine: true
-  #   working_directory: ~/cypress-example-realworld/client
-  #   steps:
-  #     - checkout:
-  #         path: ~/cypress-example-realworld
-  #     - gcr/gcr-auth
-  #     - run: gcloud info
-  #     - gcr/build-image:
-  #         image: frontend
-  #         tag: latest
-  #     - gcr/push-image:
-  #         image: frontend
-  #         tag: latest
-
-  # push-docker-backend:
-  #   description: Build and push image to google Container Registry
-  #   machine: true
-  #   working_directory: ~/cypress-example-realworld/server
-  #   steps:
-  #     - checkout:
-  #         path: ~/cypress-example-realworld
-  #     - gcr/gcr-auth
-  #     - run: gcloud info
-  #     - gcr/build-image:
-  #         image: backend
-  #         tag: latest
-  #     - gcr/push-image:
-  #         image: backend
-  #         tag: latest
-
   deploy:
     description: Deploy application to Google Kubernetes Engine
     machine: true
@@ -145,6 +113,7 @@ jobs:
       - gcp-gke/install
       - gcp-gke/update-kubeconfig-with-credentials:
           cluster: realworld-cluster
+          perform-login: true
       - gcp-gke/rollout-image:
           cluster:  realworld-cluster
           deployment: realworld-frontend
@@ -194,5 +163,6 @@ workflows:
           requires:
             - build-and-push-client
             - build-and-push-server
+            - merge-coverage
 
       
