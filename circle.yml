@@ -163,6 +163,3 @@ workflows:
           requires:
             - build-and-push-client
             - build-and-push-server
-            - merge-coverage
-
-      
