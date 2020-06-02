@@ -112,15 +112,15 @@ jobs:
     steps:
       - gcp-gke/install
       - gcp-gke/update-kubeconfig-with-credentials:
-          cluster: realworld-cluster
+          cluster: devops-p4
           perform-login: true
       - gcp-gke/rollout-image:
-          cluster:  realworld-cluster
+          cluster:  devops-p4
           deployment: realworld-frontend
           container: frontend
           image: pierresimt/frontend:latest
       - gcp-gke/rollout-image:
-          cluster:  realworld-cluster
+          cluster:  devops-p4
           deployment: realworld-backend
           container: backend
           image: pierresimt/backend:latest
