@@ -140,7 +140,7 @@ workflows:
           parallel: true
           parallelism: 2
           no-workspace: true
-          start: npm run start:coverage
+          start: NODE_API_ROOT=http://localhost:3000/api npm run start:coverage
           wait-on: http://localhost:4100
           record: true
           post-steps:

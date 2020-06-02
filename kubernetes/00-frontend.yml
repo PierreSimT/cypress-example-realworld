@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: realworld-frontend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: realworld-frontend
@@ -15,9 +15,6 @@ spec:
       containers:
       - name: realworld-frontend
         image: pierresimt/frontend
-        env:
-          - name: NODE_API_ROOT
-            value: '/api'
         ports:
         - containerPort: 5000
 ---
