@@ -117,13 +117,13 @@ jobs:
       - gcp-gke/rollout-image:
           cluster:  devops-p4
           deployment: realworld-frontend
-          container: frontend
-          image: pierresimt/frontend:latest
+          container: realworld-frontend
+          image: pierresimt/frontend
       - gcp-gke/rollout-image:
           cluster:  devops-p4
           deployment: realworld-backend
-          container: backend
-          image: pierresimt/backend:latest
+          container: realworld-backend
+          image: pierresimt/backend
 
 workflows:
   build:
